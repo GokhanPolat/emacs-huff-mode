@@ -95,6 +95,14 @@
   "Regexp to match comment-only lines.")
 
 
+(defun huff-solidity-match-regexp (re limit)
+  "Generic regular expression matching wrapper for RE with a given LIMIT."
+  (re-search-forward re
+                     limit ; search bound
+                     t     ; no error, return nil
+                     nil   ; do not repeat
+                     ))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            Solidity Related Keywords                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -112,7 +120,6 @@
     "weeks"
     "years")
   "Constants in the solidity language.")
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                            Huff Related Keywords                          ;;
@@ -344,6 +351,7 @@
     "invalid")
   "Built in data types of the huff language.")
 
+
 (defvar huff-font-lock-keywords
   (list
      ;; hex
@@ -352,7 +360,8 @@
      `("\\b\s\\(CONSTRUCTOR\\|MAIN\\)\\b" . font-lock-warning-face)
      ;; for interface, macros and func definitions
      `("\\b\\(\\(u\\|\\)int[0-9]*\\|address\\|bool\\|bytes\\|string\\|bytes[0-9]*\\)\\b" . font-lock-warning-face)
-
+     ;;
+     ;;
      `(,(regexp-opt huff-nonopcode-keywords 'symbol) . font-lock-builtin-face)
      `(,(regexp-opt huff-builtin-function-keywords 'symbol) . font-lock-type-face)
      `(,(regexp-opt huff-special-keywords 'symbol) . font-lock-type-face)
@@ -383,8 +392,8 @@
     (modify-syntax-entry ?$ "w" st)
     (modify-syntax-entry ?} "w" st)
 
-    (modify-syntax-entry ?/ ". 12b" st)
-    (modify-syntax-entry ?* ". 23b" st)
+    (modify-syntax-entry ?/ ". 124b" st)
+    (modify-syntax-entry ?* ". 23" st)
     (modify-syntax-entry ?\n "> b" st)
     st)
   "Syntax table for the huff language.")
